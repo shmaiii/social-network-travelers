@@ -11,9 +11,10 @@ class Post(models.Model):
     content = models.TextField()
     likes = models.IntegerField(default=0)
     time_posted = models.DateTimeField(auto_now=True)
+    images = models.ImageField(blank = True, upload_to="images/")
 
     def __str__(self):
-        return f"{self.location} by {self.author}" 
+        return f"{self.location} by {self.post_author}" 
 
 class Comment(models.Model):
     comment_author=models.ForeignKey(User, on_delete=models.CASCADE, related_name="comment_author")
@@ -22,5 +23,5 @@ class Comment(models.Model):
     time_posted = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.author} commented on {self.post}"
+        return f"{self.comment_author} commented on {self.post}"
     

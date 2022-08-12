@@ -1,14 +1,18 @@
+import json
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
-from .models import User
+from .models import *
 
 
 def index(request):
-    return render(request, "network/index.html")
+    return render(request, "network/index.html", {
+        "posts" : Post.objects.all().order_by("-time_posted")
+    })
 
 
 def login_view(request):
@@ -61,3 +65,23 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+def new_post(request):
+    if request.method == "POST":
+        #get data
+        data = json.loads(request.body)
+        author = request.user
+        location = data.get("location", "")
+        content = data.get("content", "")
+        image = data.get("image", "")
+        
+        # create post
+        post = Post(post_author=author, location=location, content=content, images = image)
+        post.save()
+
+        return JsonResponse({"message": "New post has been successfully posted"}, status=201)
+    return JsonResponse({"error": "new post failed"}, status = 400)
+
+
+
+

@@ -1,0 +1,21 @@
+body {
+    margin: 8px;
+}
+
+#compose-post {
+    width: 80%;
+    margin: 20px;
+    padding: 20px;
+}
+
+#compose-content {
+    width: 100%;
+}
+
+#posts-section {
+    text-align: center;
+}
+
+#post-bar {
+    width: 80%;
+}

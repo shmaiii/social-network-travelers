@@ -1,5 +1,37 @@
 {% extends "network/layout.html" %}
+{% load static %}
+
+{% block script %} 
+    <script src="{% static 'network/homepage.js' %}"></script>
+{% endblock %}
 
 {% block body %}
-    TODO
+    
+    <div id="posts-section">
+        <div id="compose-post">
+            <form id = "post-form">
+                {% csrf_token %}
+                <div>
+                    <label>Location: </label>
+                    <input id="location-input" type="text">
+                </div>
+                <textarea input="auto_grow(this)" class="form-control" id="compose-content" placeholder="What do you want to share today?" rows="20"></textarea>
+                <br>
+                <input  class="new-post-images" type="file" name="image" accept="image/*">
+                <input type="submit" class="btn btn-primary submit-new-post">
+            </form>
+        </div>
+    
+        <div id="view-post">
+            <input type="text" id="post-bar" placeholder="What do you want to share today?">
+            <br>
+            {% for post in posts %} 
+                <div>
+                    <p> {{post}} </p>
+                    <img src="{{post.images}}">
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
 {% endblock %}
