@@ -17,18 +17,27 @@
                 </div>
                 <textarea input="auto_grow(this)" class="form-control" id="compose-content" placeholder="What do you want to share today?" rows="20"></textarea>
                 <br>
-                <input  class="new-post-images" type="file" name="image" accept="image/*">
-                <input type="submit" class="btn btn-primary submit-new-post">
+                <label>Image: </label><input  class="new-post-images" type="url" name="image">
+                <input type="submit" class="btn btn-primary submit-new-post" value="Post">
             </form>
+            
         </div>
     
         <div id="view-post">
-            <input type="text" id="post-bar" placeholder="What do you want to share today?">
+            <input type="text" id="post-bar" placeholder="{{request.user}}, what's on your mind?">
             <br>
             {% for post in posts %} 
-                <div>
-                    <p> {{post}} </p>
-                    <img src="{{post.images}}">
+                <br>
+                <div id="each-post">
+                    <label>{{post.post_author}}</label>
+                    <br>
+                    <p>{{post.content}}</p>
+                    <!-- images go here -->
+                    <hr>
+                    <div style="display:flex; padding:0"> 
+                        <div id="likes-num"> <button>Like</button><p>{{post.likes}} likes</p></div>
+                        <div id="comments-num"><button>Comment</button><p>{{post.comments}} comments</p></div>
+                    </div>
                 </div>
             {% endfor %}
         </div>

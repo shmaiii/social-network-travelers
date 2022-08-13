@@ -2,6 +2,10 @@ body {
     margin: 8px;
 }
 
+label {
+    font-weight: bold;
+}
+
 #compose-post {
     width: 80%;
     margin: 20px;
@@ -13,9 +17,32 @@ body {
 }
 
 #posts-section {
-    text-align: center;
+    width: 70%;
+    margin-left: 300px;
 }
 
 #post-bar {
     width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+#each-post {
+    border-style: groove;
+    border-width: 0.5px;
+    padding: 20px;
+    padding-bottom: 0;
+}
+
+#likes-num, #comments-num {
+    display: inline-block;
+    margin-left:auto; 
+    margin-right: 10px;
+    padding: 0
+}
+
+#likes-num {
+    margin-left: 10px;
+    margin-right: auto;
 }

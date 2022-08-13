@@ -10,8 +10,9 @@ class Post(models.Model):
     location = models.CharField(max_length=64)
     content = models.TextField()
     likes = models.IntegerField(default=0)
+    comments = models.IntegerField(default=0)
     time_posted = models.DateTimeField(auto_now=True)
-    images = models.ImageField(blank = True, upload_to="images/")
+    images = models.URLField(blank=True)
 
     def __str__(self):
         return f"{self.location} by {self.post_author}" 

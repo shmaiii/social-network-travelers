@@ -4,21 +4,13 @@ document.addEventListener('DOMContentLoaded', function(){
     document.querySelector('#post-bar').addEventListener('click', new_post);
 })
 
-function new_post(event) {
+function new_post() {
 
     document.querySelector('#post-bar').style.display = 'none';
     document.querySelector('#compose-post').style.display = "block";
    
     document.querySelector('#post-form').addEventListener('submit', event => {
         event.preventDefault();
-
-        const location = document.querySelector('#location-input').value;
-        console.log(location);
-        const content = document.querySelector('#compose-content').value;
-        console.log(content);
-        const img = document.querySelector('.new-post-images').value;
-        console.log(img);
-        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
         fetch('/new_post', {
             credentials: 'include',
@@ -36,6 +28,7 @@ function new_post(event) {
             window.location.reload();
         })
         .catch(error => console.log(error));
+    
 
     });
 

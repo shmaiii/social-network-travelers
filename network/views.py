@@ -5,9 +5,9 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
+from django import forms
 
 from .models import *
-
 
 def index(request):
     return render(request, "network/index.html", {
