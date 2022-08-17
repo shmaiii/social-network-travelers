@@ -1,0 +1,16 @@
+#personal-info {
+    margin-left: auto;
+    margin-right: 250px;
+    width: 40%;
+}
+
+#username {
+    padding-left: 15px;
+}
+
+#personal-posts {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+}

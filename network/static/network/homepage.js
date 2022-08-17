@@ -1,3 +1,5 @@
+
+document.querySelector('#compose-post').style.display = "none";
 document.addEventListener('DOMContentLoaded', function(){
     document.querySelector('#compose-post').style.display = "none";
 
