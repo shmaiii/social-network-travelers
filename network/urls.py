@@ -13,7 +13,9 @@ urlpatterns = [
 
     #API
     path("new_post", views.new_post, name="new_post"),
-    path("post/<str:post_type>/", views.post, name="post"),
+    path("posts/<str:endpoint>", views.posts, name="posts"),
+    path("following/<str:endpoint>", views.following_api, name="following_api"),
+    path("profile/<str:username>/<int:id>/<str:endpoint>", views.profile_posts, name="profile_posts"),
     path("follow/<int:user_id>", views.follow, name="follow"),
 ]
 

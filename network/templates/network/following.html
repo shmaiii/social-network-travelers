@@ -1,22 +1,60 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %} 
+<div data-current_user_id = {{request.user.id}} id="view-post">
+    <div id="all-posts"></div>
+</div>
+
+<ul class="pagination" id="pagination"></ul>
+<!--
 <div id="view-post">
 
     {% for post in posts %} 
         <br>
         <div id="each-post">
             <label><a href="{% url 'profile' post.post_author post.post_author.id %}" >{{post.post_author}}</a></label>
+            {% if post.post_author == request.user %}
+                <button id="edit-btn" type="button" style="margin-left: auto; margin-right: 10px;">
+                Edit
+                </button>
+            {% endif %}
             <br>
             <p>{{post.content}}</p>
-            <!-- images go here -->
             <hr>
             <div style="display:flex; padding:0"> 
-                <div id="likes-num"> <button>Like</button><p>{{post.likes}} likes</p></div>
-                <div id="comments-num"><button>Comment</button><p>{{post.comments}} comments</p></div>
+                <div id="likes-num"> <button id="like-btn">Like</button><p>{{post.likes}} likes</p></div>
+                <div id="comments-num"><button id="comment-btn">Comment</button><p>{{post.comments}} comments</p></div>
             </div>
         </div>
     {% endfor %}
 
 </div>
+-->
+
+<script src="{% static 'network/posts.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        load_posts(1);
+        pagination();
+    })
+
+    function load_posts(current_page) {
+        fetch(`posts?page=${current_page}`)
+        .then(response => response.json())
+        .then (posts => {
+            console.log(posts);
+            postLayout(posts);
+        });
+    }
+
+    function pagination() {
+        fetch('page')
+        .then(response => response.json())
+        .then(result => {
+            console.log(result);
+            paginationSetup(result);
+        })
+    }
+</script>
 {% endblock %}

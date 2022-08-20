@@ -1,5 +1,4 @@
 
-document.querySelector('#compose-post').style.display = "none";
 document.addEventListener('DOMContentLoaded', function(){
     document.querySelector('#compose-post').style.display = "none";
 
@@ -14,6 +13,8 @@ function new_post() {
     document.querySelector('#post-form').addEventListener('submit', event => {
         event.preventDefault();
 
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
         fetch('/new_post', {
             credentials: 'include',
             method: 'POST',

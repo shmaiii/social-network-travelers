@@ -7,13 +7,20 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
 from django.http import JsonResponse
+from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 from .models import *
 
+posts_per_page = 10
+
 def index(request):
-    return render(request, "network/index.html", {
-        "posts" : Post.objects.all().order_by("-time_posted")
-    })
+    posts = Post.objects.all().order_by("-time_posted")
+
+    paginator = Paginator(posts, posts_per_page)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, "network/index.html")
 
 
 def login_view(request):
@@ -103,25 +110,67 @@ def profile(request, username, id):
         "followed": followed
     })
 
-def post(request, post_type):
-    # if post_type is profile, user_id is profile user
-    # else, user_id is request.user (not used)
-    #try:
-       # user = User.objects.get(pk=user_id)
-    #except User.DoesNotExist:
-     #   return JsonResponse({"error": "User not found"}, status = 404)
+@csrf_exempt
+def posts(request, endpoint):
+    posts = Post.objects.all().order_by("-time_posted")
+    paginator = Paginator(posts, posts_per_page) 
+    current_page = int(request.GET.get('page') or 1)
 
-    #if post_type == "profile":
-     #   posts = Post.objects.filter(post_author = user).order_by("-time_posted")
+    if endpoint == "posts":
+        page = paginator.page(current_page)
+        posts = page.object_list
+        return JsonResponse([post.serialize() for post in posts ], safe=False)
+    elif endpoint == "page":
+        return JsonResponse({"page_num": paginator.num_pages})
+    else:
+        return JsonResponse({
+            "error": "GET or PUT request required."
+        }, status=400)
 
-    if post_type == "all":
-        posts = Post.objects.all().order_by("-time_posted")
-        
-    return JsonResponse([post.serialize() for post in posts], safe=False)
+@csrf_exempt
+def following_api(request, endpoint):
+
+    following = request.user.following.all()
+    posts = Post.objects.filter(post_author__in=following).order_by("-time_posted")
+    paginator = Paginator(posts, posts_per_page)
+    current_page = int(request.GET.get('page') or 1) 
+
+    if endpoint == "posts":
+        page = paginator.page(current_page)
+        posts = page.object_list
+        return JsonResponse([post.serialize() for post in posts], safe=False)
+    elif endpoint == "page":
+        return JsonResponse({"page_num": paginator.num_pages})
+    else:
+        return JsonResponse({
+            "error": "GET or PUT request required."
+        }, status=400)
+
+@csrf_exempt
+def profile_posts(request, username, id, endpoint):
+    user = User.objects.get(pk=id)
+    posts = Post.objects.filter(post_author=user).order_by("-time_posted")
+    paginator = Paginator(posts, posts_per_page)
+    current_page = int(request.GET.get('page') or 1)
+
+    if endpoint == "posts":
+        page = paginator.page(current_page)
+        posts = page.object_list
+        return JsonResponse([post.serialize() for post in posts], safe=False)
+    elif endpoint == "page":
+        return JsonResponse({"page_num": paginator.num_pages})
+    else:
+        return JsonResponse({
+            "error": "GET or PUT request required."
+        }, status=400)
+
 
 @csrf_exempt
 def follow(request, user_id):
     user = User.objects.get(pk=user_id)
+
+    if request.method == "GET":
+        return JsonResponse(user.serialize())
 
     if request.method == "PUT":
         data = json.loads(request.body)
@@ -139,10 +188,11 @@ def follow(request, user_id):
             "error": "Something went wrong"
         }, status = 400)
 
+@login_required
 def following(request):
     following = request.user.following.all()
     posts = Post.objects.filter(post_author__in=following)
 
     return render(request, "network/following.html", {
-        "posts":  posts,
+        "posts":  posts.order_by("-time_posted"),
     })

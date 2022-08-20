@@ -15,7 +15,7 @@
             <div id="user-numbers" class="container">
                 <div class="row">
                     <div class="col-sm"> {{posts_count}} posts</div>
-                    <div class="col-sm"> {{followers}} followers</div>
+                    <div class="col-sm" id="followers-num-profile"> {{followers}} followers</div>
                     <div class="col-sm"> {{following}} following</div>
                 </div>
             </div>
@@ -32,23 +32,11 @@
 
     <hr>
 
-    <div id="personal-posts">
-        {% for post in posts %}
-        <br>
-        <div id="each-post">
-             <label><a href="{% url 'profile' post.post_author post.post_author.id %}" >{{ post.post_author }}</a></label>
-             <br />
-             <p>{{ post.content }}</p>
-             <!-- images go here -->
-             <hr>
-             <div style="display:flex; padding:0"> 
-                 <div id="likes-num"> <button>Like</button><p>{{ post.likes }} likes</p></div>
-                 <div id="comments-num"><button>Comment</button><p>{{ post.comments }} comments</p></div>
-             </div>
-             
-         </div>
-         {% endfor %}
+    <div data-current_user_id = {{request.user.id}} id="view-post">
+        <div id="all-posts"></div>
     </div>
+    
+    <ul class="pagination" id="pagination"></ul>
 
 
     <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
@@ -61,41 +49,17 @@
         }
        
     </script>
+    <script src="{% static 'network/posts.js' %}"></script>
+    <script src="{% static 'network/profile.js' %}"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
-            let follow_btn = document.querySelector('#follow-btn');
-            const user_id = document.querySelector('#personal-info').dataset.user_id;
-            console.log(user_id);
-
-            follow_btn.addEventListener('click', function() {
-                if (follow_btn.innerHTML !== 'Follow') {
-                    follow_btn.innerHTML = 'Follow';
-
-                    fetch(`/follow/${user_id}`, {
-                        method: 'PUT',
-                        body: JSON.stringify({
-                            follow: "unfollow"
-                        }),
-                        mode: 'same-origin',
-                    })
-                    .then(response => console.log(response));
-                }
-                else {
-                    follow_btn.innerHTML = 'Unfollow';
-
-                    fetch(`/follow/${user_id}`, {
-                        method: 'PUT',
-                        body: JSON.stringify({
-                            follow: "follow"
-                        }),
-                        mode: 'same-origin',
-                    })
-                    .then(response => console.log(response));
-                }
-            });
+            followButton();
+            load_posts(1);
+            pagination();
         });
+
+    
     </script>
 
 {% endblock %}

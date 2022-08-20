@@ -23,35 +23,88 @@
             
         </div>
     
-        <div id="view-post">
+        <div data-current_user_id = {{request.user.id}} id="view-post">
             {% if user.is_authenticated %}
             <input type="text" id="post-bar" placeholder="{{request.user}}, what's on your mind?">
             {% endif %}
             <br>
 
-            {% for post in posts %} 
+            <div id="all-posts"></div>
+
+            <!--
+            {% for post in page_obj %} 
                 <br>
                 <div id="each-post">
                     <label><a href="{% url 'profile' post.post_author post.post_author.id %}" >{{post.post_author}}</a></label>
+                    {% if post.post_author == request.user %}
+                        <button id="edit-btn" type="button" style="margin-left: auto; margin-right: 10px;">
+                        Edit
+                        </button>
+                    {% endif %}
                     <br>
                     <p>{{post.content}}</p>
-                    <!-- images go here -->
+            
                     <hr>
                     <div style="display:flex; padding:0"> 
-                        <div id="likes-num"> <button>Like</button><p>{{post.likes}} likes</p></div>
-                        <div id="comments-num"><button>Comment</button><p>{{post.comments}} comments</p></div>
+                        <div id="likes-num"> <button id="like-btn">Like</button><p>{{post.likes}} likes</p></div>
+                        <div id="comments-num"><button id="comment-btn">Comment</button><p>{{post.comments}} comments</p></div>
                     </div>
                 </div>
             {% endfor %}
+            -->
+            
+            
+            <ul class="pagination" id="pagination">
+                <!--
+                
+                    {% if page_obj.has_previous %}
+                
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a></li>
+                        <li class="page-item"><a class="page-link" href="?page=1">&laquo; 1</a></li>
+                    {% endif %}
+
+
+
+                    {% if page_obj.has_next %}  
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }} &raquo;</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a></li>
+                    {% endif %}
+            
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+            -->   
+            </ul>
+            
 
         </div>
     </div>
 
-    <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    
-    <script type="text/babel">
+    <script src="{% static 'network/posts.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            load_posts(1);
+            pagination();
+        });
+
+        function load_posts(current_page){
+            fetch(`posts/posts?page=${current_page}`)
+            .then(response => response.json())
+            .then(posts => {
+                console.log(posts);
+                postLayout(posts);            
+                });
+        }
+
+        
+        function pagination(){
+            fetch(`posts/page`)
+            .then(response => response.json())
+            .then(result => {
+                console.log(result);
+                paginationSetup(result);
+            });
+        }
 
     </script>
 
