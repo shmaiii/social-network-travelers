@@ -18,11 +18,11 @@ class Post(models.Model):
     content = models.TextField()
     likes = models.IntegerField(default=0)
     comments = models.IntegerField(default=0)
-    time_posted = models.DateTimeField(auto_now=True)
+    time_posted = models.DateTimeField(auto_now_add=True)
     images = models.URLField(blank=True)
 
     def __str__(self):
-        return f"{self.location} by {self.post_author}" 
+        return f"{self.id}: {self.location} by {self.post_author}" 
 
     def serialize(self):
         return {

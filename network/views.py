@@ -196,3 +196,19 @@ def following(request):
     return render(request, "network/following.html", {
         "posts":  posts.order_by("-time_posted"),
     })
+
+@csrf_exempt
+def edit_post(request, post_id):
+    post = Post.objects.get(pk=post_id)
+
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        if data.get("content") is not None:
+            content = data.get("content")
+            post.content = content
+            post.save()
+            return HttpResponse(status=204)
+    else:
+        return JsonResponse({
+            "error": "Something went wrong"
+        }, status = 400)

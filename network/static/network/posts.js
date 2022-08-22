@@ -1,6 +1,7 @@
 
 function postLayout (posts) {
     document.querySelector('#all-posts').innerHTML = "";
+    console.log(posts);
 
         posts.forEach(post => {
             const eachPost = document.createElement('div');
@@ -21,9 +22,53 @@ function postLayout (posts) {
                 editButton.innerHTML = 'Edit';
                 editButton.setAttribute('id', 'edit-btn');
                 eachPost.appendChild(editButton);
+
+                editButton.addEventListener('click', function() {
+                    console.log(post.id);
+                    console.log(post.content);
+                    curr_id = post.id;
+                    console.log(curr_id);
+                 
+                    editForm = document.createElement('form');
+                    editForm.setAttribute('id', 'edit-form');
+                    textarea = document.createElement('textarea');
+                    textarea.classList.add('form-control');
+                    textarea.value = `${post.content}`;
+                    editForm.append(textarea);
+                
+                    post = document.createElement('input');
+                    post.type = 'submit';
+                    post.classList.add('btn', 'btn-primary');
+                    post.value = 'Post';
+                    editForm.append(post);
+                    content.innerHTML = "";
+                    content.append(editForm);
+                
+                    editForm.onsubmit = function(e) {
+                        e.preventDefault();
+                        console.log(post.id);
+                        console.log(textarea.value);
+                
+                        fetch(`edit_post/${curr_id}`, {
+                            method: 'PUT',
+                            body: JSON.stringify({
+                                content: textarea.value
+                            }),
+                            mode: 'same-origin',
+                        })
+                        .then(response => {
+                            console.log(response);
+                            content.innerHTML = `<br>
+                            <p>${textarea.value}</p>
+                            <hr>`;
+                        });
+                    }                    
+                
+                });
             }
 
             const content = document.createElement('div');
+            content.setAttribute('id', 'post-content');
             content.innerHTML = `<br>
             <p>${post.content}</p>
             <hr>`;
@@ -65,6 +110,10 @@ function button (button, post, btns) {
 
     btns.appendChild(num);
 
+}
+
+function editPost(post){
+    
 }
 
 

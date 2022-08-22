@@ -17,5 +17,6 @@ urlpatterns = [
     path("following/<str:endpoint>", views.following_api, name="following_api"),
     path("profile/<str:username>/<int:id>/<str:endpoint>", views.profile_posts, name="profile_posts"),
     path("follow/<int:user_id>", views.follow, name="follow"),
+    path("edit_post/<int:post_id>", views.edit_post, name="edit-post")
 ]
 
