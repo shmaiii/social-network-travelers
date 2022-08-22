@@ -198,6 +198,7 @@ def following(request):
     })
 
 @csrf_exempt
+#edit_post can also be used to get data of liked/unliked from a post
 def edit_post(request, post_id):
     post = Post.objects.get(pk=post_id)
 
@@ -208,6 +209,27 @@ def edit_post(request, post_id):
             post.content = content
             post.save()
             return HttpResponse(status=204)
+
+        if data.get("like") is not None:
+            like = data.get("like")
+            if like == "like":
+                post.likes = post.likes + 1
+                post.save()
+                request.user.liked_posts.add(post)
+            else :
+                post.likes = post.likes - 1
+                post.save()
+                request.user.liked_posts.remove(post)
+            request.user.save()
+            return HttpResponse(status = 204)
+
+    elif request.method == "GET":
+        if post in request.user.liked_posts.all():
+            liked = "true"
+        else:
+            liked = "false"
+        return JsonResponse({"liked": liked})
+
     else:
         return JsonResponse({
             "error": "Something went wrong"

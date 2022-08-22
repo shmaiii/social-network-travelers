@@ -9,7 +9,7 @@ function followButton () {
     let follow_btn = document.querySelector('#follow-btn');
 
     follow_btn.addEventListener('click', function() {
-        if (follow_btn.innerHTML !== 'Follow') {
+        if (follow_btn.innerText !== 'Follow') {
             follow_btn.innerHTML = 'Follow';
 
 

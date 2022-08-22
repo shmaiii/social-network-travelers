@@ -1,9 +1,11 @@
+from tkinter import CASCADE
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
 class User(AbstractUser):
     following = models.ManyToManyField('self', blank=True, related_name="followers", symmetrical=False)
+    liked_posts = models.ManyToManyField('Post', related_name="liked_post", blank = True)
 
     def serialize(self):
         return {

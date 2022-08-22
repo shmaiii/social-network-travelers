@@ -45,6 +45,7 @@ function postLayout (posts) {
                     content.append(editForm);
                 
                     editForm.onsubmit = function(e) {
+                        //submit form will auto reload the page, preventDefault to stop automatic reloading
                         e.preventDefault();
                         console.log(post.id);
                         console.log(textarea.value);
@@ -81,6 +82,7 @@ function postLayout (posts) {
             button("like", post, btns);
             button("comment", post, btns);
 
+
             document.querySelector('#all-posts').appendChild(eachPost);
         });
 
@@ -88,34 +90,98 @@ function postLayout (posts) {
 
 function button (button, post, btns) {
 
-    num = document.createElement('div');
-    btn = document.createElement('button');
-    p = document.createElement('p');
-
     if( button === "like"){
-        num.setAttribute('id', 'likes-num');
-        btn.setAttribute('id', 'like-btn');
-        btn.innerHTML = `Like`;
-        p.innerHTML = `${post.likes}`;
+        numLike = document.createElement('div');
+        btnLike = document.createElement('button');
+        pLike = document.createElement('p');
+        numLike.setAttribute('id', `likes-num`);
+        btnLike.setAttribute('id', `like-btn-${post.id}`);
+
+        fetch(`edit_post/${post.id}`)
+        .then(response => response.json())
+        .then(result => {
+            console.log(result);
+            if (result.liked === "false") {
+                document.querySelector(`#like-btn-${post.id}`).innerHTML = `Like`;
+            } else {
+                document.querySelector(`#like-btn-${post.id}`).innerHTML = `Unlike`;
+            }
+        })
+        
+
+        pLike.setAttribute('class', `pLike`);
+        pLike.innerHTML = `${post.likes}`;
+
+        numLike.appendChild(btnLike);
+        numLike.appendChild(pLike);
+        btns.appendChild(numLike);
+
+        btnLike.addEventListener('click', function(e) {
+
+            e.preventDefault();
+            curr_id = post.id;
+            var parent = this.closest('#likes-num');
+            var pl = parent.lastChild;
+            
+            if (this.innerText == `Like`){
+                fetch(`edit_post/${curr_id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        like: "like"
+                    }),
+                    mode: 'same-origin',
+                })
+                .then(response => {
+                    likes = parseInt(pl.innerHTML);
+                    likes = likes + 1;
+                    parent.lastChild.innerHTML = likes;
+                    this.innerHTML = `Unlike`;
+                });
+            }
+            else {
+                console.log('unlike');
+                fetch(`edit_post/${curr_id}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        like: "unlike"
+                    }),
+                    mode: 'same-origin',
+                })
+                .then(response => {
+                    likes = parseInt(pl.innerHTML);
+                    likes = likes - 1;
+                    parent.lastChild.innerHTML = likes;
+                    this.innerHTML = `Like`;
+                    
+                });
+
+            }
+            
+
+        });
+
     } else if (button === "comment") {
-        num.setAttribute('id', 'comments-num');
-        btn.setAttribute('id', 'comment-btn');
-        btn.innerHTML = `Comment`;
-        p.innerHTML = `${post.comments}`;
+        numComment = document.createElement('div');
+        btnComment = document.createElement('button');
+        pComment = document.createElement('p');
+        numComment.setAttribute('id', 'comments-num');
+        btnComment.setAttribute('id', 'comment-btn');
+        btnComment.innerHTML = `Comment`;
+        pComment.innerHTML = `${post.comments}`;
+        numComment.appendChild(btnComment);
+        numComment.appendChild(pComment);
+        btns.appendChild(numComment);
     }
     
 
-    num.appendChild(btn);
-    num.appendChild(p);
-
-    btns.appendChild(num);
+    
+    
 
 }
 
-function editPost(post){
+function likePost(post) {
     
 }
-
 
 function paginationSetup(result) {
     if (result.page_num > 1) {
