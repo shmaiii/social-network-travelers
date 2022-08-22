@@ -6,10 +6,10 @@
 {% endblock %}
 
 {% block body %} 
-    <div data-user_id = {{user.id}} id="personal-info">
+    <div data-user_id = {{profile_user.id}} id="personal-info">
         <div>
             <label id="username">
-                {{user.username}}
+                {{profile_user.username}}
             </label>
             <br>
             <div id="user-numbers" class="container">
@@ -19,11 +19,11 @@
                     <div class="col-sm"> {{following}} following</div>
                 </div>
             </div>
-            {% if user != request.user %}
+            {% if profile_user != request.user %}
                 {% if followed %}
-                    <button data-followed = "true" id="follow-btn"> Unfollow </button>
+                    <button data-followed = "true" id="follow-btn" onclick="followButton()"> Unfollow </button>
                 {% else %}
-                    <button data-followed = "false" id="follow-btn"> Follow </button>
+                    <button data-followed = "false" id="follow-btn" onclick="followButton()"> Follow </button>
                 {% endif %}
             {% endif %}
 
@@ -54,7 +54,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            followButton();
+            
             load_posts(1);
             pagination();
         });

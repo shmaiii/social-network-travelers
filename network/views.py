@@ -102,7 +102,7 @@ def profile(request, username, id):
         followed = False
 
     return render (request, "network/profile.html", {
-        "user": user,
+        "profile_user": user,
         "posts": posts,
         "posts_count": posts.count(),
         "followers": followers,

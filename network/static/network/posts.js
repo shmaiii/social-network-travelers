@@ -50,7 +50,7 @@ function postLayout (posts) {
                         console.log(post.id);
                         console.log(textarea.value);
                 
-                        fetch(`edit_post/${curr_id}`, {
+                        fetch(`http://127.0.0.1:8000/edit_post/${curr_id}`, {
                             method: 'PUT',
                             body: JSON.stringify({
                                 content: textarea.value
@@ -97,10 +97,10 @@ function button (button, post, btns) {
         numLike.setAttribute('id', `likes-num`);
         btnLike.setAttribute('id', `like-btn-${post.id}`);
 
-        fetch(`edit_post/${post.id}`)
+        var url = `http://127.0.0.1:8000/edit_post/${post.id}`;
+        fetch(url)
         .then(response => response.json())
         .then(result => {
-            console.log(result);
             if (result.liked === "false") {
                 document.querySelector(`#like-btn-${post.id}`).innerHTML = `Like`;
             } else {
@@ -124,7 +124,7 @@ function button (button, post, btns) {
             var pl = parent.lastChild;
             
             if (this.innerText == `Like`){
-                fetch(`edit_post/${curr_id}`, {
+                fetch(`http://127.0.0.1:8000/edit_post/${curr_id}`, {
                     method: 'PUT',
                     body: JSON.stringify({
                         like: "like"
@@ -140,7 +140,7 @@ function button (button, post, btns) {
             }
             else {
                 console.log('unlike');
-                fetch(`edit_post/${curr_id}`, {
+                fetch(`http://127.0.0.1:8000/edit_post/${curr_id}`, {
                     method: 'PUT',
                     body: JSON.stringify({
                         like: "unlike"

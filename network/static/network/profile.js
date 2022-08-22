@@ -8,9 +8,9 @@ function getProfileUser(user_id){
 function followButton () {
     let follow_btn = document.querySelector('#follow-btn');
 
-    follow_btn.addEventListener('click', function() {
+    //follow_btn.addEventListener('click', function() {
         if (follow_btn.innerText !== 'Follow') {
-            follow_btn.innerHTML = 'Follow';
+           follow_btn.innerHTML = 'Follow';
 
 
             fetch(`/follow/${user_id}`, {
@@ -34,7 +34,7 @@ function followButton () {
             })
             .then(response => console.log(response));
         }
-    });
+    //});
 }
 
 function load_posts(current_page) {
