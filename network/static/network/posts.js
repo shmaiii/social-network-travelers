@@ -171,11 +171,7 @@ function button (button, post, btns) {
         numComment.appendChild(btnComment);
         numComment.appendChild(pComment);
         btns.appendChild(numComment);
-    }
-    
-
-    
-    
+    }   
 
 }
 

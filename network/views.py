@@ -1,4 +1,5 @@
 import json
+from wsgiref.util import request_uri
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -93,20 +94,20 @@ def new_post(request):
 def profile(request, username, id):
     user = User.objects.get(pk=id)
     posts = Post.objects.filter(post_author=user)
-    followers = User.objects.filter(following=user).count()
-    following = user.following.all().count()
+    followers_count = User.objects.filter(following=user).count()
+    following_count = user.following.all().count()
     
     if request.user in user.followers.all():
         followed = True
     else:
         followed = False
-
+    
     return render (request, "network/profile.html", {
         "profile_user": user,
         "posts": posts,
         "posts_count": posts.count(),
-        "followers": followers,
-        "following": following,
+        "followers": followers_count,
+        "following": following_count,
         "followed": followed
     })
 
@@ -119,7 +120,7 @@ def posts(request, endpoint):
     if endpoint == "posts":
         page = paginator.page(current_page)
         posts = page.object_list
-        return JsonResponse([post.serialize() for post in posts ], safe=False)
+        return JsonResponse([post.serialize() for post in posts], safe=False)
     elif endpoint == "page":
         return JsonResponse({"page_num": paginator.num_pages})
     else:
@@ -160,6 +161,39 @@ def profile_posts(request, username, id, endpoint):
     elif endpoint == "page":
         return JsonResponse({"page_num": paginator.num_pages})
     else:
+        return JsonResponse({
+            "error": "GET or PUT request required."
+        }, status=400)
+
+@csrf_exempt
+def profile_api(request, username, id):
+    user = User.objects.get(pk=id)
+    posts = Post.objects.filter(post_author=user).order_by("-time_posted")
+    followers_count = User.objects.filter(following=user).count()
+    following_count = user.following.all().count()
+    paginator = Paginator(posts, posts_per_page)
+    current_page = int(request.GET.get('page') or 1)
+    page = paginator.page(current_page)
+    posts = page.object_list
+
+    if request.user in user.followers.all():
+        followed = True
+    else:
+        followed = False
+    
+    if request.method == "GET":
+        return JsonResponse({
+            "posts": [post.serialize() for post in posts],
+            "profile_user": user.serialize(),
+            "posts_count": posts.count(),
+            "followers": followers_count,
+            "following": following_count,
+            "followed": followed,
+            "page_num": paginator.num_pages,
+            "current_user": request.user.serialize()
+    }, safe=False)
+
+    else: 
         return JsonResponse({
             "error": "GET or PUT request required."
         }, status=400)

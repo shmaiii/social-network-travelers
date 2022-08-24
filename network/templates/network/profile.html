@@ -6,7 +6,9 @@
 {% endblock %}
 
 {% block body %} 
-    <div data-user_id = {{profile_user.id}} id="personal-info">
+    <div data-user_id = {{profile_user.id}} data-current_user_id = {{request.user.id}} id="profile"></div>
+    <!--
+    <div id="personal-info">
         <div>
             <label id="username">
                 {{profile_user.username}}
@@ -29,10 +31,11 @@
 
         </div>
     </div>
+    -->
 
     <hr>
 
-    <div data-current_user_id = {{request.user.id}} id="view-post">
+    <div id="view-post">
         <div id="all-posts"></div>
     </div>
     
@@ -42,21 +45,131 @@
     <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    
-    <script type="text/babel">
-        function Posts() {
-            return null;
-        }
-       
-    </script>
     <script src="{% static 'network/posts.js' %}"></script>
     <script src="{% static 'network/profile.js' %}"></script>
+    <script type="text/babel">
+
+        const user_id = document.querySelector('#profile').dataset.user_id;
+
+        function PersonalInfo(props) {
+            let followed = props.info.followed;
+            const current_user_id = props.info.current_user.id;
+            const profile_user_id = props.info.profile_user.id;
+
+            function hasFollowed(followed) {
+                if (followed){
+                    return true;
+                } else { return false; }
+            }
+            return(
+            <div id="personal-info">
+                <label id="username">
+                    {props.info.profile_user.username}
+                </label>
+                <br />
+                <div id="user-numbers" class="container">
+                    <div class="row">
+                        <div class="col-sm"> {props.info.posts_count} posts</div>
+                        <div class="col-sm" id="followers-num-profile"> {props.info.followers} followers</div>
+                        <div class="col-sm"> {props.info.following} following</div>
+                    </div>
+                    { current_user_id !== profile_user_id && 
+                    <button id="follow-btn" onclick="followButton()"> {  hasFollowed(followed) ? 'Unfollow' : 'Follow'} </button>
+                    }
+                </div>
+            </div>)
+        }
+
+        function ProfilePosts(props) {
+            console.log(props.posts)
+
+            return(
+                <div id="view-post">
+                    <div id="all-posts">
+                        {props.posts.map((post) => (
+                            
+                            <div key={post.id} id="each-post">
+                                <label id="post-user"
+                                // onclick={location.href = `/profile/${post.post_author.username}/${post.post_author.id}`}
+                                ><a href='/profile/{post.post_author.usernam}/{post.post_author.id}'>{post.post_author.username}</a></label>
+                                
+                                { post.post_author.id == props.current_user_id && 
+                                    <button id="edit-btn" type="button">
+                                    Edit
+                                    </button>
+                                }
+                                <br />
+                                <p>{post.content}</p>
+            
+                                <hr />
+                                <div id="post-btns"> 
+                                    <div id="likes-num"> <button id="like-btn">Like</button><p>{post.likes} likes</p></div>
+                                    <div id="comments-num"><button id="comment-btn">Comment</button><p>{post.comments} comments</p></div>
+                                </div>
+                            
+                            </div>
+                        ))}
+                    </div>
+                 </div>
+            )
+
+        }
+
+        function Profile(props) {
+            
+        
+            const [info, setInfo] = React.useState({
+                posts: [],
+                profile_user: {},
+                posts_count: 0,
+                followers: 0,
+                following: 0,
+                followed: "",
+                page_num: 0,
+                current_user: {}
+            });
+
+        
+        React.useEffect(() => {
+            fetch(`${user_id}/profile_api`)
+            .then (response => response.json())
+            .then (result => {
+                console.log(result);
+                setInfo({
+                        posts: result.posts,
+                        profile_user: result.profile_user,
+                        posts_count: result.posts_count,
+                        followers: result.followers,
+                        following: result.following,
+                        followed: result.followed,
+                        page_num: result.page_num,
+                        current_user: result.current_user
+                    });
+            });
+        }, []); 
+
+            console.log(info);
+
+            return (
+                <React.Fragment>
+                    <PersonalInfo info={info} />
+                    <hr />
+                    <ProfilePosts posts={info.posts} current_user_id={info.current_user.id}/>
+                </React.Fragment>
+            );
+
+        }
+        ReactDOM.render(
+            <Profile />,
+            document.getElementById("profile"));   
+        
+    </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            load_posts(1);
-            pagination();
+        document.addEventListener('DOMContentLoaded', function() { 
+           // load_posts(1);
+           // pagination();
+           
         });
 
     

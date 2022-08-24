@@ -14,3 +14,13 @@
     margin-right: auto;
     margin-top: 50px;
 }
+
+#poss-btns {
+    display: flex;
+    padding: 0;
+}
+
+#edit-btn {
+    margin-left: auto;
+    margin-right: 10px;
+}

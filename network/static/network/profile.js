@@ -1,9 +1,5 @@
-const user_id = document.querySelector('#personal-info').dataset.user_id;
-console.log(user_id);
-
-function getProfileUser(user_id){
-    
-}
+//const user_id = document.querySelector('#personal-info').dataset.user_id;
+//console.log(user_id);
 
 function followButton () {
     let follow_btn = document.querySelector('#follow-btn');
@@ -54,3 +50,4 @@ function pagination() {
         paginationSetup(result);
     })
 }
+
