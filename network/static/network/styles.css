@@ -93,6 +93,12 @@ label {
     white-space: pre-wrap;
 }
 
+#time-posted {
+    margin-left: auto;
+    margin-right: 30px;
+    font-style: italic;
+    text-align: right;
+}
 #posts-btns {
     display:flex; 
     padding:0

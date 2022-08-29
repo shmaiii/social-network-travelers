@@ -123,7 +123,7 @@
             });
             
             const [content, setContent] = React.useState(post.content);
-            const [form, setForm] = React.useState( <p id='post_content'> {content} </p>)
+            const [form, setForm] = React.useState( <span><p id='post_content'> {content} </p> <p id='time-posted'> Posted on {post.time_posted}</p></span> )
             /*const[content, setContent] = React.useState({
                 content: post.content,
                 form: (
@@ -228,7 +228,7 @@
                                 // onclick={location.href = `/profile/${post.post_author.username}/${post.post_author.id}`}
                     ><a href={`/profile/${post.post_author.username}/${post.post_author.id}`}>{post.post_author.username}</a></label>
                     <br />
-                    <label id="post-location">Location: </label> {post.location}
+                    <span><label id="post-location">Location: </label> {post.location}</span>
                     <br />
                     {form}
             

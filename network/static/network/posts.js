@@ -15,19 +15,17 @@ function postLayout (posts) {
                 location.href = `/profile/${post.post_author.username}/${post.post_author.id}`;
             })
            
-            label.append(a);
+            label.appendChild(a);
             eachPost.appendChild(label);
 
             const location = document.createElement('span');
-            location.innerHTML = `<br> <label>Location: </label> ${post.location}`;
+            location.innerHTML = `<br><label>Location: </label> ${post.location}`;
             eachPost.appendChild(location);
 
 
             const content = document.createElement('span');
             content.setAttribute('id', 'post-content');
-            content.innerHTML = `<br>
-            <p>${post.content}</p>
-            <hr>`;
+            content.innerHTML = `<br><p id="post-content">${post.content}</p><p id="time-posted"> Posted on ${post.time_posted}</p><hr>`;
             eachPost.appendChild(content);
 
             btns = document.createElement('div');
@@ -53,6 +51,7 @@ function postLayout (posts) {
                     textarea = document.createElement('textarea');
                     textarea.classList.add('form-control');
                     textarea.value = `${post.content}`;
+                    textarea.oninput = function() {textarea.style.height =  textarea.scrollHeight + "px";}
                     editForm.append(textarea);
                 
                     post = document.createElement('input');
