@@ -6,6 +6,12 @@
 {% endblock %}
 
 {% block body %}
+    <div id="search-section">
+        <h3>Featured Destinations:</h3>
+        {% for location in locations %} 
+            <p>{{location}}</p>
+        {% endfor %}
+    </div>
     
     <div id="posts-section">
         <div id="compose-post">
@@ -17,7 +23,7 @@
                 </div>
                 <textarea input="auto_grow(this)" class="form-control" id="compose-content" placeholder="What do you want to share today?" rows="20"></textarea>
                 <br>
-                <label>Image: </label><input  class="new-post-images" type="url" name="image">
+               
                 <input type="submit" class="btn btn-primary submit-new-post" value="Post">
             </form>
             

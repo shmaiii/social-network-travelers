@@ -17,11 +17,29 @@ function postLayout (posts) {
             //label.append(a);
             eachPost.appendChild(label);
 
+            const location = document.createElement('div');
+            location.innerHTML = `<br> <label>Location: </label> ${post.location}`;
+            eachPost.appendChild(location);
+
+
+            const content = document.createElement('div');
+            content.setAttribute('id', 'post-content');
+            content.innerHTML = `<br>
+            <p>${post.content}</p>
+            <hr>`;
+            eachPost.appendChild(content);
+
+            btns = document.createElement('div');
+            btns.setAttribute('id', 'posts-btns');
+            
+            
+            button("like", post, btns);
+
             if (parseInt(document.querySelector('#view-post').dataset.current_user_id) === parseInt(post.post_author.id)) {
                 const editButton = document.createElement('button');
                 editButton.innerHTML = 'Edit';
                 editButton.setAttribute('id', 'edit-btn');
-                eachPost.appendChild(editButton);
+                btns.appendChild(editButton);
 
                 editButton.addEventListener('click', function() {
                     console.log(post.id);
@@ -68,21 +86,7 @@ function postLayout (posts) {
                 });
             }
 
-            const content = document.createElement('div');
-            content.setAttribute('id', 'post-content');
-            content.innerHTML = `<br>
-            <p>${post.content}</p>
-            <hr>`;
-            eachPost.appendChild(content);
-
-            btns = document.createElement('div');
-            btns.setAttribute('id', 'posts-btns');
             eachPost.appendChild(btns);
-            
-            button("like", post, btns);
-            button("comment", post, btns);
-
-
             document.querySelector('#all-posts').appendChild(eachPost);
         });
 
@@ -90,7 +94,6 @@ function postLayout (posts) {
 
 function button (button, post, btns) {
 
-    if( button === "like"){
         numLike = document.createElement('div');
         btnLike = document.createElement('button');
         pLike = document.createElement('p');
@@ -158,20 +161,7 @@ function button (button, post, btns) {
             }
             
 
-        });
-
-    } else if (button === "comment") {
-        numComment = document.createElement('div');
-        btnComment = document.createElement('button');
-        pComment = document.createElement('p');
-        numComment.setAttribute('id', 'comments-num');
-        btnComment.setAttribute('id', 'comment-btn');
-        btnComment.innerHTML = `Comment`;
-        pComment.innerHTML = `${post.comments}`;
-        numComment.appendChild(btnComment);
-        numComment.appendChild(pComment);
-        btns.appendChild(numComment);
-    }   
+        }); 
 
 }
 

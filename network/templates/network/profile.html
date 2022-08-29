@@ -122,13 +122,15 @@
                 liked_num: 0
             });
             
-            const[content, setContent] = React.useState({
+            const [content, setContent] = React.useState(post.content);
+            const [form, setForm] = React.useState( <p id='post_content'> {content} </p>)
+            /*const[content, setContent] = React.useState({
                 content: post.content,
                 form: (
                     <p id='post_content'> {post.content} </p>
                 ),
                 
-            });
+            });*/
 
            // const [contentForm, setContentForm] = React.useState({
             //    contentForm: (
@@ -187,19 +189,16 @@
             function submitEdit(e) {
                     e.preventDefault();
 
-                    console.log('submitted with content' + content.content);
+                    console.log('submitted with content' + content);
 
-                    setContent({
-                        ...content,
-                        form: (
-                            <p>{content.content}</p>
-                        )
-                    });
+                    setForm(
+                            <p>{content}</p>
+                    );
 
                     fetch(`http://127.0.0.1:8000/edit_post/${post.id}`, {
                             method: 'PUT',
                             body: JSON.stringify({
-                                content: content.content
+                                content: content
                             }),
                             mode: 'same-origin',
                     })
@@ -212,15 +211,15 @@
             
 
             function editPost() {
-                setContent({
-                    ...content,
-                    form: (
+                setForm(
+                    
+                    
                     <form id="edit-form" onSubmit={submitEdit}>
-                        <textarea class="form-control" onChange={(event) => setContent({...content, content: event.target.value})} value={content.content} > </textarea>
+                        <textarea class="form-control" onChange={(event) => setContent(event.target.value)} value={content} > </textarea>
                         <input type="submit" class="btn btn-primary" value='Post'/>
                     </form>
-                    )
-                });   
+                    
+                );   
 
             }
             return (
@@ -229,7 +228,9 @@
                                 // onclick={location.href = `/profile/${post.post_author.username}/${post.post_author.id}`}
                     ><a href={`/profile/${post.post_author.username}/${post.post_author.id}`}>{post.post_author.username}</a></label>
                     <br />
-                    {content.form}
+                    <label id="post-location">Location: </label> {post.location}
+                    <br />
+                    {form}
             
                     <hr />
                     <div id="post-btns"> 
@@ -248,7 +249,7 @@
         }
 
         function ProfilePosts(props) {
-            console.log(props.posts);
+            console.log(props.posts)
 
             return(
                 <div id="view-post">

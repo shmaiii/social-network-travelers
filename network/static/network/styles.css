@@ -16,9 +16,28 @@ label {
     width: 100%;
 }
 
+.body{
+    position: relative;
+    margin: 0;
+    padding: 0;
+    display: inline;
+}
+
+#search-section {
+    float:left;
+    width:300px;
+    margin: 0px;
+    overflow: auto;
+    overflow-wrap: break-word;
+    border-style: groove;
+    border-width: 0.5px;
+}
+
 #posts-section {
-    width: 70%;
+    width: 100%;
     margin-left: 300px;
+    margin-right: 0px;
+    
 }
 
 #post-bar {

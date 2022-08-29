@@ -21,7 +21,9 @@ def index(request):
     paginator = Paginator(posts, posts_per_page)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, "network/index.html")
+    return render(request, "network/index.html", {
+        'locations': Post.objects.values_list('location', flat=True).distinct()
+    })
 
 
 def login_view(request):
