@@ -1,11 +1,38 @@
 body {
     margin: 8px;
+    background-color: #F3E7E7;
 }
 
 label {
     font-weight: bold;
 }
 
+#nav {
+    background-color: black;
+    margin-bottom: 30px;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: white;
+}
+
+.nav-link:hover {
+   color: gray;
+}
+
+#posts-btns button:hover {
+    border-width: 1px;
+}
+
+#follow-btn:hover {
+    border-width:1px;
+}
+
+.navbar-brand {
+    font-size: 30px;
+    font-weight: bold;
+}
 #compose-post {
     width: 80%;
     margin: 20px;
@@ -25,25 +52,31 @@ label {
 
 #search-section {
     float:left;
-    width:300px;
+    width:350px;
     margin: 0px;
     overflow: auto;
     overflow-wrap: break-word;
     border-style: groove;
     border-width: 0.5px;
+    padding: 10px;
+    margin-left: 20px;
+    background-color: white;
 }
 
 #posts-section {
-    width: 100%;
-    margin-left: 300px;
+    width: 70%;
+    margin-left: 400px;
     margin-right: 0px;
+
     
 }
 
 #post-bar {
+    padding-left: 5px;
     width: 80%;
     margin-left: auto;
     margin-right: auto;
+    font-style: italic;
 
 }
 
@@ -53,6 +86,11 @@ label {
     padding: 20px;
     padding-bottom: 0;
     margin-top: 30px;
+    background-color: white;
+}
+
+#post-content {
+    white-space: pre-wrap;
 }
 
 #posts-btns {
@@ -70,4 +108,12 @@ label {
 #likes-num {
     margin-left: 10px;
     margin-right: auto;
+}
+
+#edit-btn {
+    height: 50%;
+}
+
+#all-posts {
+    margin: auto;
 }

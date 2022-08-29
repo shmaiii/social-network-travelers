@@ -21,7 +21,6 @@ function new_post() {
             body: JSON.stringify({
                 location: document.querySelector('#location-input').value,
                 content: document.querySelector('#compose-content').value,
-                image: document.querySelector('.new-post-images').value
             }),
             headers: {'X-CSRFToken': csrftoken},
             mode: 'same-origin',

@@ -7,10 +7,12 @@
 
 {% block body %}
     <div id="search-section">
-        <h3>Featured Destinations:</h3>
+        <h5>Featured Destinations:</h5>
+        <ul>
         {% for location in locations %} 
-            <p>{{location}}</p>
+            <li><p>{{location}}</p></li>
         {% endfor %}
+        </ul>
     </div>
     
     <div id="posts-section">

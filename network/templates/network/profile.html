@@ -233,7 +233,7 @@
                     {form}
             
                     <hr />
-                    <div id="post-btns"> 
+                    <div id="posts-btns"> 
                         <div id="likes-num"> <button id="like-btn" onClick={likeClick}>{ hasLiked() ? "Unlike" : "Like"}</button><p>{liked.liked_num} likes</p></div>
                         { post.post_author.id == props.current_user_id && 
                         <div class="edit-btn">

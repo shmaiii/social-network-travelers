@@ -8,21 +8,22 @@ function postLayout (posts) {
             eachPost.setAttribute('id', 'each-post');
 
             const label = document.createElement('label');
-            //var a = document.createElement('a');
-            //a.setAttribute('href', `{% url 'profile' ${post.post_author} ${post.post_author.id} %}`);
-            label.innerHTML = `${post.post_author.username}`;
-            label.onclick = function() {
+            var a = document.createElement('a');
+            a.setAttribute('href', `/profile/${post.post_author.username}/${post.post_author.id}`);
+            a.innerHTML = `${post.post_author.username}`;
+            label.addEventListener('click', function(){
                 location.href = `/profile/${post.post_author.username}/${post.post_author.id}`;
-            }
-            //label.append(a);
+            })
+           
+            label.append(a);
             eachPost.appendChild(label);
 
-            const location = document.createElement('div');
+            const location = document.createElement('span');
             location.innerHTML = `<br> <label>Location: </label> ${post.location}`;
             eachPost.appendChild(location);
 
 
-            const content = document.createElement('div');
+            const content = document.createElement('span');
             content.setAttribute('id', 'post-content');
             content.innerHTML = `<br>
             <p>${post.content}</p>
